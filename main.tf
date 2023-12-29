@@ -1,9 +1,7 @@
-terraform {
-  cloud {
-    organization = "rtm-demo-lab"
+resource "aws_s3_bucket" "web_bucket" {
+  bucket = var.bucket_name
 
-    workspaces {
-      name = "terra-house"
-    }
+  tags = {
+    Environment = "Dev"
   }
 }
