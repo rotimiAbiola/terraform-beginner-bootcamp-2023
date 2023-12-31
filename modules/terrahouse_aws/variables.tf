@@ -8,6 +8,17 @@ variable "bucket_name" {
   }
 }
 
+variable "content_version" {
+  type        = number
+  description = "The version of content, must be a positive integer starting at 1"
+
+  validation {
+    condition     = var.content_version > 0 && floor(var.content_version) == ceil(var.content_version)
+    error_message = "Content version must be a positive integer"
+  }
+}
+
+
 # variable "index_html_filepath" {
 #   description = "The file path for index.html"
 #   type        = string

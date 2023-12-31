@@ -30,6 +30,10 @@ resource "aws_s3_object" "website_files" {
   key          = each.value
   source       = "./public/${each.value}"
   etag         = filemd5("./public/${each.value}")
+  lifecycle {
+    replace_triggered_by = [ terraform_data.content_version.output ]
+    ignore_changes = [ etag ]
+  }
 }
 
 resource "aws_s3_bucket_policy" "default" {
@@ -53,4 +57,8 @@ resource "aws_s3_bucket_policy" "default" {
       }
     ]
   })
+}
+
+resource "terraform_data" "content_version" {
+  input = var.content_version
 }
