@@ -22,11 +22,11 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   comment             = "Static website for ${var.bucket_name}"
   default_root_object = "index.html"
 
-#   logging_config {
-#     include_cookies = false
-#     bucket          = "mylogs.s3.amazonaws.com"
-#     prefix          = "myprefix"
-#   }
+  # logging_config {
+  #   include_cookies = false
+  #   bucket          = ""
+  #   prefix          = "myprefix"
+  # }
 
   # aliases = ["demo.rtmdemos.name.ng"]
 
@@ -66,3 +66,16 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     cloudfront_default_certificate = true
   }
 }
+
+resource "terraform_data" "invalidate_cache" {
+  triggers_replace = terraform_data.content_version.output
+
+  provisioner "local-exec" {
+    command = <<-COMMAND
+    aws cloudfront create-invalidation \
+    --distribution-id ${aws_cloudfront_distribution.s3_distribution.id} \
+    --paths '/*'
+    COMMAND
+  }
+}
+
