@@ -28,7 +28,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 #     prefix          = "myprefix"
 #   }
 
-  aliases = ["demo.rtmdemos.name.ng"]
+  # aliases = ["demo.rtmdemos.name.ng"]
 
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
