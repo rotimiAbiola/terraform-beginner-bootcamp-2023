@@ -18,11 +18,6 @@ resource "aws_s3_bucket_website_configuration" "web_config" {
   }
 }
 
-# resource "aws_s3_bucket_acl" "bucket_acl" {
-#   bucket = aws_s3_bucket.web_bucket.bucket
-#   acl    = "private"
-# }
-
 resource "aws_s3_object" "website_files" {
   for_each     = fileset("./public/", "**")
   bucket       = aws_s3_bucket.web_bucket.bucket
@@ -39,18 +34,18 @@ resource "aws_s3_object" "website_files" {
 resource "aws_s3_bucket_policy" "default" {
   bucket = aws_s3_bucket.web_bucket.id
   policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
+    "Version" = "2012-10-17",
+    "Statement" = [
       {
-        Sid    = "AllowCloudFrontServicePrincipalReadOnly",
-        Effect = "Allow",
-        Principal = {
-          Service = "cloudfront.amazonaws.com"
+        "Sid"    = "AllowCloudFrontServicePrincipalReadOnly",
+        "Effect" = "Allow",
+        "Principal" = {
+          "Service" = "cloudfront.amazonaws.com"
         },
-        Action   = "s3:GetObject",
-        Resource = "arn:aws:s3:::${aws_s3_bucket.web_bucket.id}/*",
-        Condition = {
-          StringEquals = {
+        "Action"   = "s3:GetObject",
+        "Resource" = "arn:aws:s3:::${aws_s3_bucket.web_bucket.id}/*",
+        "Condition" = {
+          "StringEquals" = {
             "AWS:SourceArn" = data.aws_caller_identity.current.arn
           }
         }
